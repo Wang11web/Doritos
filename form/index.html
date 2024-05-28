@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="user-scalable=no,width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.2/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/4.5.8/vee-validate.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <title>多力多滋表單</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <div id="App">
+        <div class="container px-0 mx-0" v-if="!isCheck && !isResult"> 
+          <img src="./image/logo.png" class="w-100 mt-3 px-4">
+          <h2 class="text-center fw-bold ls_2 fz_24 mt-4 px-4">活動辦法及注意事項同意書</h2>
+          <p class="ls_1 text_justify px-4">本人報名參加 「多力多滋腕力爭霸機挑戰賽」活動，茲同意遵守以下活動注意規範及活動規定，嗣後活動期間如有違反，願無異議放棄體驗資格，並無條件離開活動現場，特此同意書為憑。</p>
+          <form class="row gy-2 gx-0 needs-validation">
+            <!--   同意textarea    -->
+            <div class="col-12 px-4">
+                <div :class="{textDanger: checkbox3Btn == 'checked'}" class="d-flex ls_2 mb-2 justify-content-center align-items-center textWarn"><img src="./image/O_Warning.png" class="d-inline mx-1" style="width: 16px;">請完整閱讀下方橘框內活動辦法</div>
+                <div class="position-relative text_area pb-2">
+                  <div class="overflow-auto maxtext p-3 mb-3 w-100" id="scroll">
+                    <a @click="topFunction" id="myBtn"><img src="./image/O_ArrowDown.png" style="width: 10px;"></a>
+                    <ul class="p-0">
+                      <li class="li_first_indent">1.	本人願意遵守現場多力多滋工作人員所指導之安全規定且於健康情況良好之狀態下進行體驗活動。</li>
+                      <li class="li_first_indent">2.	本人瞭解於活動進行期間，勿任意擅自操作現場活動道具用品，若違反者願意放棄體驗資格。</li>
+                      <li class="li_first_indent">3.	身上物品（包括但不限於手臂上穿戴的飾品、手錶）請於參與活動前自行寄存，若有遺失或損壞，主辦單位台灣百事食品股份有限公司無需承擔任何責任。</li>
+                      <li class="li_first_indent">4.	活動過程中若有任何不適情形請立即通報工作人員，待工作人員指示辦理。</li> 
+                      <li class="li_first_indent">5.	本人瞭解參加活動僅能使用主辦單位提供之器具，不得使用個人器具，且不得徒手拉扯活動道具或觸摸非工作人員指示之機械裝置。</li>
+                      <li class="li_first_indent">6.	現場活動道具用品為本次活動使用，請小心使用，如有故意毀損者，將依市價求償。</li>
+                      <li class="li_first_indent">7.	基於安全理由，活動進行中如遇天氣不可抗拒狀況(如暴雨、強風閃電、打雷)影響活動安全，經工作人員評估基於安全考量，主辦單位台灣百事食品股份有限公司有延後、終止活動等權利。                        
+                        <br><span class="text-secondary">✔</span> 本活動每場限每人體驗一次，主辦單位台灣百事食品股份有限公司有權利僅開放給未參與過活動的消費者報名。                        
+                        <br><span class="text-secondary">✔</span> 本活動如有未盡事宜，主辦單位台灣百事食品股份有限公司擁有保留、修改、暫停及解釋活動內容之權利。                        
+                      </li>
+                      <li class="li_first_indent">8.	參加本活動與所有上傳至多力多滋粉絲團本活動貼文留言之照片，皆視為參加者同意並授權予台灣百事食品股份有限公司使用，台灣百事食品股份有限公司得用於任何本活動之宣傳網站、文宣、報導上使用，且不限地區、免版稅、可永久、公開使用(包括但不限於重製、改作、修飾、公開展示、公開傳輸、公開播送等方式使用該照片)，並可公開發表，且無須再通知或經參加者審核同意；參加者參加本活動上傳至本活動貼文留言之照片、文字須保證無侵害第三人權利(包括但不限於智慧財產權、肖像權)、違反法令之情形，若有自負相關法律責任，並賠償主辦單位台灣百事食品股份有限公司所受損害。</li>
+                      <li class="li_first_indent">9.	 活動參加者同意並無償授權主辦單位台灣百事食品股份有限公司爲了品牌與行銷宣傳的緣故使用含有本人之肖像、聲音、姓名、網名、身份介紹於本活動相關的以視聽影音、圖文、畫像等方式呈現的宣傳網站、文宣、報導中， 並可按照主辦單位台灣百事食品股份有限公司的要求在法律允許的最大範圍内進行重製、必要的編輯或修改或/及結合其它必要元素（文字、聲音、圖片、其它影音視聽片段等）一併於加以使用。</li>
+                      <li class="li_first_indent">10.	 活動參加者應要求將個人資料填寫並於網路傳輸成功送出後均視為已同意提供個人資料給台灣百事食品股份有限公司供現場活動參與資格之核實用並用於獎品發送使用，個人資料使用期間至活動結束後 3 個月內，依據法令及相關規定，台灣百事食品股份有限公司將保障活動參與者個人資料安全。</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="form-check mt-3 position-relative">
+                  <div :class="{dBlock: checkbox3Btn == 'checked'}" class="text-center ls_2 mb-2 textDanger dNone pe-4">請「完整閱讀」上述同意條款！</div>
+                  <input class="form-check-input check_input mt-2" type="checkbox" v-model="formData.checkbox3" id="invalidCheck3" required :disabled="this.checkbox3Btn !== 'read'">
+                  <label class="form-check-label ps-3" for="invalidCheck3">
+                    我同意以上辦法參加此次活動，本人已詳細閱讀注意事項，填妥後願意將此同意書交允工作人員。
+                  </label>
+                  <div class="position-absolute top-0 start-0 w-100 h-100" :class="{dNone: checkbox3Btn != 'unread'}" @click="checkRead"></div>
+                </div>
+            </div>
+            <!--   同意1     -->
+            <div class="col-12 px-4">
+              <div class="form-check">
+                <input class="form-check-input check_input" type="checkbox" v-model="formData.checkbox1" id="invalidCheck" required>
+                <label class="form-check-label ps-3" for="invalidCheck">
+                  本人年滿 12 歲(含)以上、55 歲(含)以下者，為確保活動體驗之安全性，願意配合出示身分證明文件進行報名，且聽從活動工作人員指導及注意事項(未滿 18 歲之青少年者，監護人需在場陪同並負責)。
+                </label>
+              </div>
+            </div>
+            <!--   同意2     -->
+            <div class="col-12 px-4">
+              <div class="form-check">
+                <input class="form-check-input check_input" type="checkbox" v-model="formData.checkbox2" id="invalidCheck2" required>
+                <label class="form-check-label ps-3" for="invalidCheck2">
+                  本人身心健康狀態良好，無下列之情況：心臟病、高血壓、腦溢血、氣喘、先天性癲癇症、孕婦、飲酒或高風險症狀之疾病等情形；若有身體不適（含行動不便需攙扶、拐杖行走或無法自行上下樓梯），願意主動告知工作人員。
+                </label>
+              </div>
+            </div>
+            <!--   姓名     -->
+            <div class="bg_bottom">
+              <img src="./image/BG_Bottom.png" alt="" class="w-100 position-absolute bottom-0 bg_bottom_img">
+              <div class="col-12 px-4 mb-2">
+                <label for="validationname" class="form-label">同意人姓名</label>
+                <div class="input-group has-validation">
+                  <input type="text" class="form-control text_input" id="validationname" v-model="formData.name" maxlength="30" required onchange="this.value=this.value.trim()">
+                </div>
+              </div>
+              <!--   身份證字號     -->
+              <div class="col-12 px-4 mb-2">
+                <label for="validationid" class="form-label">身份證字號 / ID No. (Foreigner)</label>
+                <div class="input-group has-validation">
+                  <input type="text" class="form-control text_input" :class="{check:(formData.id.length<10)}" id="validationid" maxlength="20" aria-describedby="inputGroupPrepend" v-model.trim="formData.id" required onkeyup="this.value=this.value.toUpperCase().replace(/\s+/g,'')">
+                </div>
+              </div>
+              <!--   聯絡電話     --> 
+              <div class="col-12 px-4 mb-2">
+                <label for="validationCustom03" class="form-label">手機號碼</label>
+                <div class="input-group has-validation">
+                  <input type="text" class="form-control text_input" :class="{check:(formData.phone.length<10)}" id="validationCustom03"  maxlength="20" v-model="formData.phone" required onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
+                </div>
+              </div>
+              <!--   出生年次     -->
+              <div class="col-12 px-4 mb-2">
+                <label for="validationage" class="form-label">出生年次<span class="ms-1 fs_small">(需年滿12歲(含)以上、55歲(含)以下者)</span></label>
+                <select class="form-select text_input" id="validationage" v-model="formData.age" required>
+                  <option selected disabled value="">choose...</option>
+                  <option v-for="i in 44" :key="i" :value="i+11">{{ 2013-i }}/民國{{ 102-i }}年({{11+i}}歲 )</option>
+                </select>
+              </div>
+              <!--   按鈕     -->
+              <div class="col-12 d-flex justify-content-center my-4 px-4">
+                  <button class="btn_submit" type="button" @click="check(formData)"><img src="./image/Button_01.png" class="w-100"></button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <check :data="formData" :result="isResult" @goback="toggleCheckPage" @goresult="toggleResultPage" v-else-if="isCheck"></check>
+        <result :data="formData" v-if="isResult == 'success'"></result>
+        <div v-else-if="isResult == 'fail'">
+          <div class="container px-4">
+            <img src="./image/logo.png" class="w-100 mt-3">
+            <div class="py-3">
+              <h4 class="fw-bold text-center ls_1">您已重複報名！</h4>
+              <h4 class="fw-bold text-center ls_1 mb-4">活動<span class="text_orange">每日限報名一次</span>哦！</h4>
+              <div class="row g-1 mb-4">
+                <div class="col-6 px-4">
+                  <div class="mb-3">
+                    <img src="./image/Time_1.png" alt="time1" width="90" class="mb-1 time_transform">
+                    
+                    <div class="fw-bold word_break ls_1"><i>台北三創<span class="d-block">1F中心廣場</span></i></div>
+                  </div>
+                  <div>
+                    <img src="./image/Time_2.png" alt="time2" width="90" class="mb-1 time_transform">
+                    <div class="fw-bold word_break ls_1"><i>台北華山文創園區<span class="d-block">華山劇場</span></i></div>
+                  </div>
+                </div>
+                <div class="col-6 px-4">
+                  <div class="mb-3">
+                    <img src="./image/Time_3.png" alt="time3" width="90" class="mb-1 time_transform">
+                    <div class="fw-bold word_break ls_1"><i>高雄巨蛋<span class="d-block">體育館前廣場</span></i></div>
+                  </div>
+                  <div class="mb-3">
+                    <img src="./image/Time_4.png" alt="time4" width="90" class="mb-1 time_transform">
+                    <div class="fw-bold word_break ls_1"><i>宜蘭 新月廣場</i></div>
+                  </div>
+                  <div>
+                    <img src="./image/Time_5.png" alt="time5" width="90" class="mb-1 time_transform">
+                    <div class="fw-bold word_break ls_1"><i>台中大遠百<span class="d-block">1F時尚廣場</span></i></div>
+                  </div>
+                </div>
+              </div>
+              <p class="text-center mb-2 text_blue fz_14">更多活動詳情請見多力多滋FB粉絲團</p>
+              <div class="d-flex justify-content-center">
+                <a href="https://zh-tw.facebook.com/doritos.tw/" target="_blank"><img src="./image/fb.png" class="w-100" style="max-width: 220px;"></a>
+              </div>
+            </div>
+            <img src="./image/BG_Bottom.png" alt="" class="w-100 position-absolute bottom-0 start-0 bg_bottom_img bg_bottom_img_s2 p-0 mw_n">
+          </div>
+        </div>
+      </div> 
+      
+</body>
+
+<script>
+  var mybutton = document.getElementById("myBtn");
+  var mybox = document.getElementById("scroll");
+  var alert = document.createElement('div')
+  alert.innerHTML = `<div id="pop" class="w-100 h-100 pop d-flex justify-content-center align-items-center"><img src="./image/pop-up_01.png" onclick="closePop()"></>`
+  function closePop(){
+    document.querySelector('#pop').remove()
+    document.body.style.overflow = 'unset';
+  }
+  let vh = window.innerHeight * 0.01;
+  window.addEventListener('resize', () => { let vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', `${vh}px`); });
+const App = Vue.createApp({
+  data(){
+    return{
+      formData:{
+        checkbox1:'',
+        checkbox2:'',
+        checkbox3:'',
+        name: '',
+        id:'',
+        phone:'',
+        age:'',
+        toggle: ''
+      },
+      isCheck: false,
+      isResult: false,
+      checkbox3Btn: 'unread'
+    }
+  },
+  computed: {
+  },
+  mounted() {
+    var mybox = document.getElementById("scroll");
+    mybox.addEventListener("scroll", this.scrollFunction);
+  },
+  methods: {
+    check(formData) {
+      const forms = document.querySelectorAll('.needs-validation');
+      Array.prototype.slice.call(forms)
+        .forEach((form) => {
+            if (form.checkValidity() && formData.id.length>9 && formData.phone.length>9 && this.checkbox3Btn == 'read') {
+              this.toggleCheckPage();
+            }
+            else{
+              alert.innerHTML = `<div id="pop" class="w-100 h-100 pop d-flex justify-content-center align-items-center"><img src="./image/pop-up_01.png" onclick="closePop()"></>`
+              document.getElementById('App').append(alert);
+              document.body.style.overflow = 'hidden';
+            }
+              form.classList.add('was-validated')
+              if(this.checkbox3Btn == 'unread'){
+                this.checkbox3Btn = 'checked'
+              }
+          }, false)
+    },
+    checkRead(){
+      this.checkbox3Btn = 'checked'
+    },
+    toggleCheckPage(){
+      this.isCheck = !this.isCheck;
+    },
+    toggleResultPage(re){
+      this.isCheck = !this.isCheck;
+      this.isResult = re;
+    },
+    topFunction() {
+      const mybox = document.getElementById("scroll");
+      const mybutton = document.getElementById("myBtn");
+      mybox.scrollTo({top: mybox.scrollHeight, behavior: 'smooth'});
+      mybutton.style.display = "none";
+    },
+    scrollFunction() {
+      const mybox = document.getElementById("scroll");
+      const mybutton = document.getElementById("myBtn");
+      if (mybox.scrollTop < mybox.scrollHeight-220) {
+        mybutton.style.display = "block";
+      } else {
+        mybutton.style.display = "none";
+        this.checkbox3Btn = 'read';
+      }
+    },
+  },
+});
+App.component("check",{
+  props: ["data","check","result"],
+  template: `
+  <div class="container px-4 h-100 d-flex flex-column justify-content-center">
+    <img src="./image/logo.png" class="w-100 px-4 position-absolute top-0 start-0 mt-3">
+    <div class="box p-4">
+      <h3 class="btntext text-center fw-bold ls_2">活動同意書資料確認</h3>
+      <div class="card-subtitle fz_14 mb-4 ls_2">同意人姓名<span class="ms-2">|</span><span class="ms-2">{{data.name}}</span></div>
+      <div class="card-subtitle fz_14 mb-4 ls_1">身份證字號/ ID No.<span class="ms-2">|</span><span class="ms-2">{{data.id}}</span></div>
+      <div class="card-subtitle fz_14 mb-4 ls_2">手機號碼<span class="ms-2">|</span><span class="ms-2">{{data.phone}}</span></div>
+      <div class="card-subtitle fz_14 ls_2">出生年次<span class="ms-2">|</span><span class="ms-2">{{113-data.age}}</span></div>
+    </div>
+    <div class="position-absolute bottom-0 start-0 w-100">
+      <p class="text-center check_text2 ls_2 px-4 position-relative d-flex justify-content-center align-items-center">本人確認以上資料正確無誤</p>
+      <div class="row w-100">
+        <img src="./image/BG_Bottom.png" alt="" class="w-100 position-absolute bottom-0 start-0 bg_bottom_img bg_bottom_img_s p-0 mw_n">
+        <div class="col-12 d-flex justify-content-between mt-2 mb-5 px-5">
+          <button class="btn_submit" type="button" @click="goback()"><img src="./image/Button_03.png" class="w-100"></button>
+          <button class="btn_submit" type="button" @click.prevent="submit"><img src="./image/Button_04.png" class="w-100"></button>
+        </div>
+      </div>
+    </div>
+    <div class="loadmask" id="load">
+      <span class="loader"></span>
+    </div>
+  </div>
+  `,
+  methods: {
+    goresult(re){
+      this.$emit('goresult',re);
+    },
+    goback(){
+      this.$emit('goback');
+    },
+    load(bool){
+      if(bool === 'load'){
+        document.getElementById("load").style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+      else{
+        document.getElementById("load").style.display = 'none';
+        document.body.style.overflow = 'unset';
+      }
+    },
+    submit(){
+      let age = 2024 - this.data.age;
+      let gender = this.data.id.substr(1, 1)==1?1:this.data.id.substr(1, 1)==2?2:3;
+      this.load('load');
+      fetch("https://doritos-event.com:8008/POST_SignUp", {
+        method: 'POST',
+        headers: {
+          "Content-Type": `application/json`,
+        },
+        body: JSON.stringify({
+          "NationalID": this.data.id.toString(),
+          "Name": this.data.name.toString(),
+          "Gender": Number(gender),
+          "Phone": this.data.phone.toString(),
+          "YearOfBirth": Number(age)
+        })
+      })
+        .then(response => response.json())
+        .then(result => {
+            if(result.Result==true) {
+              this.load('unload');
+              this.goresult('success');
+            }
+            else if(result.Result==false) {
+              this.load('unload');
+              this.goresult('fail');
+            }
+            else {
+              alert('註冊錯誤');
+            }
+          }
+        )
+        .catch(error => console.log('error', error));
+    }
+  }
+});
+App.component("result",{
+  props: ["data"],
+  template: `
+  <div class="container px-4">
+    <img src="./image/logo.png" class="w-100 mt-3">
+    <h3 class="fw-bold text-center ls_1 mt-4">已收到您的同意書</h3>
+    <h3 class="fw-bold text-center ls_1">請於報名櫃台出示</h3>
+    <h3 class="fw-bold text-center ls_1 text_orange">身分證明文件</h3>
+    <div class="resultbox p-4 mt-4">
+      <img src="./image/BG_Bottom.png" alt="" class="w-100 position-absolute bottom-0 start-0 bg_bottom_img bg_bottom_img_s p-0 mw_n">
+      <div class="card-subtitle fz_14 mb-4 ls_2">同意人姓名<span class="ms-2">|</span><span class="ms-2">{{data.name}}</span></div>
+      <div class="card-subtitle fz_14 mb-4 ls_1">身份證字號/ ID No.<span class="ms-2">|</span><span class="ms-2">{{data.id}}</span></div>
+      <div class="card-subtitle fz_14 mb-4 ls_2">手機號碼<span class="ms-2">|</span><span class="ms-2">{{data.phone}}</span></div>
+      <div class="card-subtitle fz_14 ls_2">出生年次<span class="ms-2">|</span><span class="ms-2">{{113-data.age}}</span></div>
+    </div>
+  </div>
+  `,
+  methods: {
+  }
+});
+App.mount('#App');
+</script>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimum-scale=1">
+  <title>多力多滋分享</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+  <div class="container position-relative">
+    <img src="./image/logo.png" class="w-100 mt-3 px-4">
+    <div class="px-5 mt-4 content_w mx-auto">
+      <img src="./image/Title_Step1.png" alt="step1" width="100" class="step_transform">
+      <div class="d-flex justify-content-between mt-3">
+        <h4 class="ls_3 fw-bold"><i>點擊複製按鈕<span class="d-block">複製Hashtag</span></i></h4>
+        <img src="./image/BTN_Copy.png" alt="" width="80" id="copy">
+      </div>
+      <div class="mb-4">
+        <div class="text_hash"><i>#多力多滋超給力挺你到底<span class="d-block">#多力多滋腕力爭霸機</span></i></div>
+      </div>
+      <img src="./image/Title_Step2.png" alt="step2" width="100" class="step_transform">
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <h4 class="ls_3 fw-bold pb-3"><i>開啟FB分享</i></h4>
+        <img src="./image/BTN_FB.png" alt="" width="80" id="fb">
+      </div>
+    </div>
+    <img src="./image/BG_Bottom.png" alt="" class="w-100 position-absolute bottom-0 start-0 bg_bottom_img p-0 mw_n">
+  </div>
+</body>
+<script>
+  let vh = window.innerHeight * 0.01;
+
+  document.getElementById('copy').addEventListener('click',()=>{
+    let textArea = document.createElement('textArea');
+    let text = `
+#多力多滋超給力挺你到底  #多力多滋腕力爭霸機`;
+    document.body.appendChild(textArea);
+    textArea.value = text;
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    alert('已完成複製');
+  })
+
+  document.getElementById('fb').addEventListener('click',()=>{
+    location.href = "https://www.facebook.com/doritos.tw?mibextid=eQY6cl";
+  })
+</script>
+</html>

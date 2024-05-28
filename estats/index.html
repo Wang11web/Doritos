@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.2/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <div id="App">
+        <div class="container">
+            <div class="d-flex align-items-center my-3">
+                <select id="date" v-model="date.month" class="col-2 text-center py-2">
+                    <option v-for="month in 12" :value="month">{{ month }}</option>
+                </select>
+                <span class="mx-2">月</span>
+                <select id="date" v-model="date.day" class="col-2 text-center py-2">
+                    <option v-for="day in 31" :value="day">{{ day }}</option>
+                </select>
+                <span class="mx-2">日</span>
+                <button @click="goDate" class="btn btn-primary">選擇</button>
+                <button @click="goGenerate" class="btn btn-success ms-2">生成報表</button>
+            </div>
+            <table class="table table-primary my-3">
+                <thead>
+                    <tr>
+                        <th scope="col" class="w-50">類別</th>
+                        <th scope="col" class="w-50">人數</th>
+                    </tr>
+                </thead>
+                <tbody v-if="dataList">
+                    <tr v-for="(data, i) in dataList.CancelTypeStats" :key="i">
+                        <th>{{ data.Type==0?'其他：( 沒證件/沒臉書、資料/年齡不符、隊友不玩等 )':data.Type==1?'身體不適：( 內傷｜中暑、月經等 )':data.Type==2?'受傷：( 外傷 )':data.Type==3?'有事忙碌：( 久候棄權等 )':'資料有誤：( id、年齡、姓名、電話 )' }}</th>
+                        <td>{{ data.Count }}</td>
+                    </tr> 
+                    <tr>
+                        <th>總取消人數</th>
+                        <td>{{ dataList.CancelTotal }}</td>
+                    </tr>
+                    <tr>
+                        <th>未審核人數</th>
+                        <td>{{ dataList.NoCheckInPlayerCount }}</td>
+                    </tr>
+                    <tr>
+                        <th>重複註冊人數</th>
+                        <td>{{ dataList.RepeatedRegistration }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-danger table-striped my-3">
+                <thead>
+                    <tr>
+                        <th scope="col">時段</th>
+                        <th scope="col">報名人數</th>
+                        <th scope="col">已審核人數</th>
+                        <th scope="col">平均等候 分(秒)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(data, i) in dataHourly" :key="i">
+                    <th>{{ data.hour }}~{{ Number(data.hour)+1 }}</th>
+                    <td>{{ data.SignUpCount }}</td>
+                    <td>{{ data.CheckedCount }}</td>
+                    <td>{{ data.OrderTime }}</td>
+                </tr>
+                <tr v-if="dataList">
+                    <th>總人數</th>
+                    <td>{{ dataList.TotalSignUpPlayerCount }}</td>
+                    <td>{{ dataList.TotalCheckedPlayerCount }}</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+            <label class="py-2 px-3" style="background-color: #D1E7DD;">審核男女分布</label>
+            <table class="table table-success table-striped mb-3">
+                <thead>
+                    <tr>
+                        <th scope="col">年齡</th>
+                        <th scope="col">男</th>
+                        <th scope="col">女</th>
+                        <th scope="col">其他</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(data, i) in dataAge" :key="i">
+                    <th>{{ data.range }}</th>
+                    <td>{{ data.male }}</td>
+                    <td>{{ data.female }}</td>
+                    <td>{{ data.other }}</td>
+                </tr>
+                <tr v-if="dataList">
+                    <th>總人數</th>
+                    <td>{{ dataList.CheckedMalePlayerCount }}</td>
+                    <td>{{ dataList.CheckedFemalePlayerCount }}</td>
+                    <td>{{ dataList.CheckedForeignerPlayerCount }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+<script>
+const App = Vue.createApp({
+    data(){
+        return{
+            dataList: [],
+            dataHourly: [{hour: '12'},{hour: '13'},{hour: '14'},{hour: '15'},{hour: '16'},{hour: '17'},{hour: '18'},{hour: '19'},{hour: '20'},{hour: '21'}],
+            dataAge: [{age: 12, range: '12~17'},{age: 18, range: '18~24'},{age: 25, range: '25~34'},{age: 35, range: '35~44'},{age: 45, range: '45~55'}],
+            date:{
+                month: '',
+                day: ''
+            }
+        }
+    },
+    created() {
+        let date = new Date();
+        this.set(date);
+        this.getData(date);
+    },
+    methods: {
+        getData(day) {
+            this.dataList = [];
+            this.dataHourly = [{hour: '12'},{hour: '13'},{hour: '14'},{hour: '15'},{hour: '16'},{hour: '17'},{hour: '18'},{hour: '19'},{hour: '20'},{hour: '21'}];
+            this.dataAge = [{age: 12, range: '12~17'},{age: 18, range: '18~24'},{age: 25, range: '25~34'},{age: 35, range: '35~44'},{age: 45, range: '45~55'}];
+            const api = 'https://doritos-event.com:8008/POST_DailyStatisticalReport';
+            fetch(api, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": `application/json`,
+                },
+                body: JSON.stringify({
+                    "Day": day
+                })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    this.dataList = result.Report;
+                    console.log(this.dataList)
+                    if(result.Report){
+                        for(i in result.Report.HourlyCheckedStats) {
+                            this.dataHourly.map(data=>{
+                                if(data.hour == result.Report.HourlyCheckedStats[i].Hour){
+                                    data.CheckedCount = result.Report.HourlyCheckedStats[i].Count;
+                                }
+                            })
+                        }
+                        for(i in result.Report.HourlyOrderStats) {
+                            this.dataHourly.map(data=>{
+                                if(data.hour == result.Report.HourlyOrderStats[i].OrderHour){
+                                    data.OrderTime = `${(result.Report.HourlyOrderStats[i].AverageWaitTime/60000).toFixed(2)} (${(result.Report.HourlyOrderStats[i].AverageWaitTime/1000).toFixed(0)})`;
+                                }
+                            })
+                        }
+                        for(i in result.Report.HourlySignUpStats) {
+                            this.dataHourly.map(data=>{
+                                if(data.hour == result.Report.HourlySignUpStats[i].Hour){
+                                    data.SignUpCount = result.Report.HourlySignUpStats[i].Count;
+                                }
+                            })
+                        }
+
+                        for(i in result.Report.CheckedAgeGenderStats) {
+                            this.dataAge.map(data=>{
+                                if(data.age == result.Report.CheckedAgeGenderStats[i].AgeRange){
+                                    for(j in result.Report.CheckedAgeGenderStats[i].Data) {
+                                        if(result.Report.CheckedAgeGenderStats[i].Data[j].Gender == 1) data.male = result.Report.CheckedAgeGenderStats[i].Data[j].Count;
+                                        else if(result.Report.CheckedAgeGenderStats[i].Data[j].Gender == 2) data.female = result.Report.CheckedAgeGenderStats[i].Data[j].Count;
+                                        else data.other = result.Report.CheckedAgeGenderStats[i].Data[j].Count;
+                                    }
+                                }
+                            })
+                        }
+                    }
+                })
+                .catch(error => console.log('error', error));
+        },
+        set(date){
+            this.date.month = date.getMonth()+1;
+            this.date.day = date.getDate();
+        },
+        goDate(){
+            let date = new Date();
+            date.setMonth(this.date.month-1);
+            date.setDate(this.date.day);
+            this.getData(date);
+        },
+        goGenerate(){
+            let date = new Date();
+            date.setMonth(this.date.month-1);
+            date.setDate(this.date.day);
+            const api = 'https://doritos-event.com:8008/POST_GenerateDailyStatisticalReport';
+            fetch(api, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": `application/json`,
+                },
+                body: JSON.stringify({
+                    "Day": date
+                })
+                })
+                .then(response => response.json())
+                .then(result=>{
+                    if(result.Result) {
+                        this.getData(date);
+                    }
+                })
+        }
+    },
+})
+
+App.mount('#App');
+</script>
+</html>
